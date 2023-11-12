@@ -9,6 +9,9 @@ const Registration = () => {
 
     const navigator = useNavigate()
 
+    const [fnameError, setfNameError] = useState("")
+    const [lnameError, setlNameError] = useState("")
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -30,7 +33,7 @@ const Registration = () => {
     const registerSubmitHandler = async (e) => {
         e.preventDefault()
         await axios.post(BASE_URL, formData)
-        .then((res) => {
+        .then((res) => { 
             if(res.status === 200) {
                 navigator('/login')
                 toast.success('Registration Success', {
@@ -46,7 +49,8 @@ const Registration = () => {
             }
         })
         .catch((err) => {
-            console.log(err)
+            setfNameError(err.response.data.error.firstName)
+            setlNameError(err.response.data.error.lastName) 
         })
 
         
@@ -64,10 +68,12 @@ const Registration = () => {
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >First Name</label>
                                             <input type="text" name="firstName" onChange={onchangeHandler} className="form-control" placeholder="First Name" />
+                                            <p>{fnameError && fnameError }</p>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Last Name</label>
                                             <input type="text" name="lastName" onChange={onchangeHandler} className="form-control" placeholder="Last Name" />
+                                            <p>{lnameError && lnameError }</p>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Mobile</label>

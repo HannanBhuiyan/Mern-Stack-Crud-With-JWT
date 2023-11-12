@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const Profile = require("../models/ProfileModel")
 const jwt = require('jsonwebtoken');
 
@@ -15,19 +16,28 @@ exports.getAllUsers = async (req, res) => {
 
 exports.registrationController = async (req, res) => {
     const { firstName, lastName, email, mobile, password  } = req.body
-    try {
-        const newUsers = new Profile({
-            firstName,
-            lastName,
-            email,
-            mobile,
-            password
-        }) 
-        await newUsers.save()
-        res.status(200).json({ "status": "Registration success" })
-    } catch (error) {
-        res.status(500).send(error.message)
+
+    const errors = validationResult(req).formatWith(error => error.msg)
+ 
+    if(!errors.isEmpty()) {
+        res.status(500).send({ "error": errors.mapped()})
     }
+    else {
+        try {
+            const newUsers = new Profile({
+                firstName,
+                lastName,
+                email,
+                mobile,
+                password
+            }) 
+            await newUsers.save()
+            res.status(200).json({ "status": "Registration success" })
+        } catch (error) {
+            res.status(500).send(error.message)
+        }
+    } 
+    
 }
 
 exports.loginController = async  (req, res) => {
