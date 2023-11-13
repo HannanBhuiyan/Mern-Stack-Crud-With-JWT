@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
-const Profile = require("../models/ProfileModel")
+const Profile = require("../models/profileModel")
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 
 exports.getAllUsers = async (req, res) => {
@@ -15,7 +17,7 @@ exports.getAllUsers = async (req, res) => {
 
 
 exports.registrationController = async (req, res) => {
-    const { firstName, lastName, email, mobile, password  } = req.body
+    const { firstName, lastName, email, mobile, password } = req.body
 
     const errors = validationResult(req).formatWith(error => error.msg)
  
@@ -23,13 +25,14 @@ exports.registrationController = async (req, res) => {
         res.status(500).send({ "error": errors.mapped()})
     }
     else {
+        let hashPassword = await bcrypt.hash(password, saltRounds);
         try {
             const newUsers = new Profile({
                 firstName,
                 lastName,
                 email,
                 mobile,
-                password
+                password: hashPassword
             }) 
             await newUsers.save()
             res.status(200).json({ "status": "Registration success" })

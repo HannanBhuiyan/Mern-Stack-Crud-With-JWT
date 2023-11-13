@@ -1,4 +1,4 @@
-const { Schema , model } = require("mongoose")
+const {Schema, model } = require("mongoose")
 
 const profileSchema = new Schema({
     firstName: {
@@ -26,6 +26,6 @@ const profileSchema = new Schema({
     }
 },{ timestamps: true })
 
-const Profile = model('Profile', profileSchema)
+const Profile = model('profile', profileSchema)
 module.exports = Profile
 

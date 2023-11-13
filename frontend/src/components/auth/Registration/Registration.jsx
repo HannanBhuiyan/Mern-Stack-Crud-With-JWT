@@ -11,6 +11,10 @@ const Registration = () => {
 
     const [fnameError, setfNameError] = useState("")
     const [lnameError, setlNameError] = useState("")
+    const [mobileError, setMobileError] = useState("")
+    const [emailError, setlEmailError] = useState("")
+    const [passwordError, setlPasswordError] = useState("")
+    const [confirmPasswordError, setConfirmPasswordError] = useState("")
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -18,6 +22,7 @@ const Registration = () => {
         email: "",
         mobile: "",
         password: "",
+        comfirm_password: "",
     })
 
     const onchangeHandler = (e) => {
@@ -51,10 +56,23 @@ const Registration = () => {
         .catch((err) => {
             setfNameError(err.response.data.error.firstName)
             setlNameError(err.response.data.error.lastName) 
+            setMobileError(err.response.data.error.mobile) 
+            setlEmailError(err.response.data.error.email) 
+            setlPasswordError(err.response.data.error.password) 
+            setConfirmPasswordError(err.response.data.error.comfirm_password) 
+
         })
 
         
     }
+
+    const errorStyle = { 
+        color: "red", 
+        fontSize: "16px", 
+        fontWeight: "600", 
+        marginTop: "6px" 
+    }
+
 
     return (
         <>
@@ -68,28 +86,34 @@ const Registration = () => {
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >First Name</label>
                                             <input type="text" name="firstName" onChange={onchangeHandler} className="form-control" placeholder="First Name" />
-                                            <p>{fnameError && fnameError }</p>
+                                            <p style={errorStyle} >{fnameError && fnameError }</p>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Last Name</label>
                                             <input type="text" name="lastName" onChange={onchangeHandler} className="form-control" placeholder="Last Name" />
-                                            <p>{lnameError && lnameError }</p>
+                                            <p style={errorStyle}>{lnameError && lnameError }</p>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Mobile</label>
                                             <input type="number" name="mobile"  onChange={onchangeHandler} className="form-control" placeholder="Mobile" />
+                                            <p style={errorStyle}>{mobileError && mobileError }</p>
                                         </div> 
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Email</label>
                                             <input type="text" name="email"  onChange={onchangeHandler} className="form-control" placeholder="Email" />
+                                            <p style={errorStyle}>{emailError && emailError }</p>
                                         </div> 
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Password</label>
                                             <input type="password" name="password" onChange={onchangeHandler} className="form-control" placeholder="Password" />
+                                            <p style={errorStyle}>{passwordError && passwordError }</p>
                                         </div> 
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Confirm Password</label>
-                                            <input type="text" disabled className="form-control" placeholder="Confirm Password" />
+                                            <input type="password" name="comfirm_password" onChange={onchangeHandler} className="form-control" placeholder="Confirm Password" />
+
+                                            <p style={errorStyle}>{confirmPasswordError && confirmPasswordError}</p>
+
                                         </div> 
                                         <input type="submit" value="Register" className="form-control bg-info" />
                                     </form>
