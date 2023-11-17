@@ -44,13 +44,20 @@ exports.registrationController = async (req, res) => {
 }
 
 exports.loginController = async  (req, res) => {
-    const { email, password } = req.body
+    const { email } = req.body
+
+    const errors = validationResult(req).formatWith(err => err.msg)
+
+    if(!errors.isEmpty()){
+        return res.status(500).json({ "error": errors.mapped()})
+    }
+ 
     try {
-        const existsUsers = await Profile.findOne({ email: email, password: password })
+        const existsUsers = await Profile.findOne({email})
         if(existsUsers) {
             let payload = {
                 exp: Math.floor(Date.now() / 1000) + (15*60*60),
-                data:existsUsers
+                data: existsUsers
             }
             var token = jwt.sign(payload, 'secretkey123456');
             res.status(200).json({ "status" : "Login success", "token": token, "user": existsUsers })

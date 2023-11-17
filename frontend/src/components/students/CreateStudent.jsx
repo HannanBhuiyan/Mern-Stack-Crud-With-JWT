@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {toast } from 'react-toastify';
 import MasterLayout from "../marster-layout/MasterLayout";
+import { getToken } from "../helpers/SessionHelper";
+
+const AxiosHeader = { headers: { "token": getToken() } }
 
 const CreateStudent = () => {
 
@@ -20,7 +23,7 @@ const CreateStudent = () => {
             studentEmail
         }
 
-        axios.post('http://localhost:4000/api/v1/create-student/', newStudent)
+        axios.post('http://localhost:4000/api/v1/create-student/', newStudent, AxiosHeader)
             .then(res => {
                 if(res.status === 201) {
                     navigator('/')

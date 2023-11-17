@@ -1,24 +1,41 @@
 import React from "react";
 import ListStudent from "./components/students/ListStudent";
-import { BrowserRouter, Route, Routes } from "react-router-dom"; 
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"; 
 import CreateStudent from "./components/students/CreateStudent";
 import Registration from "./components/auth/Registration/Registration";
 import Login from "./components/auth/Login/Login";
+import { getToken } from "./components/helpers/SessionHelper";
 
 
 const App = () => {
-  return(
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<ListStudent /> } />
-          <Route path="/create-student" element={<CreateStudent /> } /> 
-          <Route path="/registration" element={<Registration />} /> 
-          <Route path="/login" element={<Login />} /> 
-        </Routes> 
-      </BrowserRouter>
-    </>
-  )
+
+  if(getToken()){
+    return(
+      <>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<ListStudent /> } />
+            <Route path="/create-student" element={<CreateStudent /> } /> 
+            <Route path="/registration" element={<Navigate to={'/'} replace />} /> 
+            <Route path="/login" element={<Navigate to={'/'} />} replace />  
+          </Routes> 
+        </BrowserRouter>
+      </>
+    )
+  }
+  else {
+    return(
+      <>
+        <BrowserRouter>
+          <Routes> 
+            <Route path="/" element={<Navigate to={'/login'} replace /> } />
+            <Route path="/registration" element={<Registration />} /> 
+            <Route path="/login" element={<Login />} /> 
+          </Routes> 
+        </BrowserRouter>
+      </>
+    )
+  }
 }
 
 export default App;

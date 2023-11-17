@@ -34,7 +34,6 @@ exports.updateStudentController = async (req, res) => {
         const student = await Student.findById(req.params.id)
         student.studentName = studentName
         student.studentEmail = studentEmail
-
         student.save()
         res.status(200).json({ "message": "Update Success" })
 

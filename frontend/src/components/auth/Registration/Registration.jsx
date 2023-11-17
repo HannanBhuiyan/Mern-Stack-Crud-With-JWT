@@ -60,10 +60,7 @@ const Registration = () => {
             setlEmailError(err.response.data.error.email) 
             setlPasswordError(err.response.data.error.password) 
             setConfirmPasswordError(err.response.data.error.comfirm_password) 
-
         })
-
-        
     }
 
     const errorStyle = { 

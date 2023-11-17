@@ -2,8 +2,15 @@ import React, { useEffect, useState } from "react";
 import CustomModal from "../customModal/CustomModal";
 import { FaXmark } from "react-icons/fa6";
 import axios from "axios";
-
 import {toast } from 'react-toastify';
+import { getToken } from "../helpers/SessionHelper";
+
+const AxiosHeader = {
+    headers: {
+        "token": getToken()
+    }
+}
+
 
 const EditModal = ({ editId, getAllStudent , modalToggle, studentName,setStudentName,studentEmail,setStudentEmail,setModalToggle }) => {
 
@@ -12,7 +19,7 @@ const EditModal = ({ editId, getAllStudent , modalToggle, studentName,setStudent
         let id = editId
         let url = "http://localhost:4000/api/v1/update-student/"+id
         const postData = {studentName, studentEmail }
-        await axios.post(url, postData)
+        await axios.post(url, postData, AxiosHeader)
             .then((res) => {
                 if(res.status === 200) {
                     setModalToggle(false)  

@@ -1,14 +1,18 @@
-import React, { useState } from "react";
-import { ToastContainer } from "react-toastify";
-
+import axios from "axios";
+import React, { useRef, useState } from "react";
+import { ToastContainer } from "react-toastify"; 
+import { setToken, setUserDetails } from "../../helpers/SessionHelper";
+import { useNavigate } from "react-router-dom";
+const BASE_URL = 'http://localhost:4000/api/v1/login' 
 
 const Login = () => {
 
+    const navigator = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
-
+ 
 
     const onchangeHandler = (e) => {
         const { name, value } = e.target
@@ -20,9 +24,22 @@ const Login = () => {
         })
     }
 
-    const loginSubmitHandler = (e) => {
-        e.preventDefault()
-        console.log(formData)
+    const loginSubmitHandler = async (e) => {
+        e.preventDefault() 
+
+        await axios.post(BASE_URL, formData)
+        .then((res) => {
+            if(res.status === 200) {
+                setToken(res.data['token'])
+                setUserDetails(res.data['user'])
+               window.location.href = "/"
+            }
+             
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+ 
     } 
 
 
@@ -42,7 +59,8 @@ const Login = () => {
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Password</label>
                                             <input type="password" name="password" onChange={onchangeHandler} className="form-control" placeholder="Password" />
-                                        </div>  
+                                        </div>   
+
                                         <input type="submit" value="Login" className="form-control bg-info" />
                                     </form>
                                </div>

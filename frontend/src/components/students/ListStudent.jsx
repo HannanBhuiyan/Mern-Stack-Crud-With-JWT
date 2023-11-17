@@ -6,24 +6,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import EditModal from "./EditModal";
 import swal from 'sweetalert';
 import MasterLayout from "../marster-layout/MasterLayout";
+import { getToken } from "../helpers/SessionHelper";
+import { getAllStudentData } from "../services/studentService";
+import { useSelector } from "react-redux";
+
+const AxiosHeader = {headers: { "token": getToken()}} 
+
 
 const ListStudent = () => {
-
-    const [students, setStudent] = useState([])
+ 
     const [studentName, setStudentName] = useState("")
     const [studentEmail, setStudentEmail] = useState("")
     const [editId, setEditId] = useState("")
     const [modalToggle, setModalToggle] = useState(false)
 
-
-    const getAllStudent = async () => {
-        try {
-            let students = await axios.get('http://localhost:4000/api/v1')  
-           setStudent(students.data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const students = useSelector((state) => state.student.allStudent)
 
 
     // delete student
@@ -39,7 +36,7 @@ const ListStudent = () => {
               })
               .then(async (willDelete) => {
                 if (willDelete) {
-                    let students = await  axios.delete('http://localhost:4000/api/v1/delete-student/'+id) 
+                    let students = await  axios.delete('http://localhost:4000/api/v1/delete-student/'+id, AxiosHeader) 
                     if(students.status === 200) { 
                         swal("Poof! Your imaginary file has been deleted!", {
                             icon: "success",
@@ -61,7 +58,7 @@ const ListStudent = () => {
     const getEditData = async (id) => {
         setModalToggle(true)
        try {
-        const students = await axios.get('http://localhost:4000/api/v1/single-student/'+id)
+        const students = await axios.get('http://localhost:4000/api/v1/single-student/'+id, AxiosHeader)
             const { data } = students
             setStudentName(data.data.studentName)
             setStudentEmail(data.data.studentEmail)
@@ -72,9 +69,9 @@ const ListStudent = () => {
     }
 
     useEffect(() => {
-        getAllStudent()
+        getAllStudentData()
     },[])
-
+   
 
     return(
         <>
@@ -121,7 +118,6 @@ const ListStudent = () => {
                             setModalToggle={setModalToggle}
                             setEditId={setEditId}
                             editId={editId}
-                            getAllStudent={getAllStudent}
                         ></EditModal> 
                     </div>
             </div>

@@ -4,8 +4,12 @@ import App from './App.jsx'
 import './index.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.js'
+import { Provider } from 'react-redux'
+import store from './components/redux/store/store.js'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <App />
+  <Provider store={store}>
+    <App />
+  </Provider>
 )

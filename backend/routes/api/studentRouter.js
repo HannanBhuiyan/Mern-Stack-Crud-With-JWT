@@ -4,11 +4,11 @@ const { getStudentController, postStudentController, singleStudentController, up
 const authVerify = require('../../middlewares/authVerifyMiddleware')
 
 
-router.get('/',getStudentController)
-router.post('/create-student', postStudentController)
-router.get('/single-student/:id', singleStudentController)
-router.post('/update-student/:id', updateStudentController)
-router.delete('/delete-student/:id', deleteStudentController)
+router.get('/', authVerify, getStudentController)
+router.post('/create-student', authVerify, postStudentController)
+router.get('/single-student/:id', authVerify, singleStudentController)
+router.post('/update-student/:id', authVerify, updateStudentController)
+router.delete('/delete-student/:id', authVerify, deleteStudentController)
 
 
 module.exports = router
