@@ -35,7 +35,6 @@ const EditStudent = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault() 
-
         studentUpdate(fromData, id)
         .then((res) => {
             console.log(res)
