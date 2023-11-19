@@ -1,8 +1,15 @@
 import React from "react";
  
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom' 
 
 const Navbar = () => {
+
+    const navigator = useNavigate()
+    const removeLocalstorage = () => { 
+        localStorage.removeItem("token")
+        window.location.href = "/login"
+    }
+
     return(
         <>
         <nav className="navbar navbar-expand-lg">
@@ -14,6 +21,9 @@ const Navbar = () => {
                         </li> 
                         <li className="nav-item">
                             <Link className="nav-link" aria-current="page" to="/create-student">Create</Link>
+                        </li> 
+                        <li className="nav-item">
+                            <button onClick={removeLocalstorage} className="btn btn-success" >Logout</button>
                         </li> 
                     </ul> 
                 </div>

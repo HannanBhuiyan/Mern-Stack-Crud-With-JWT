@@ -17,7 +17,6 @@ module.exports = [
     .withMessage("Password field is required")
     .custom(async (password, {req}) => {
         let user = await Profile.findOne({ email: req.body.email }) 
-        
         if(user){
             let match = await bcrypt.compare(password, user.password)
             if(!match){

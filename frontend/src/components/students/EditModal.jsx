@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CustomModal from "../customModal/CustomModal";
 import { FaXmark } from "react-icons/fa6";
-import axios from "axios";
+import axios, { all } from "axios";
 import {toast } from 'react-toastify';
 import { getToken } from "../helpers/SessionHelper";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../redux/store/store";
+import { setModalToggle } from "../redux/state-slice/studentSlice";
+// import { studentUpdate } from "../services/studentService";
 
 const AxiosHeader = {
     headers: {
@@ -12,37 +16,44 @@ const AxiosHeader = {
 }
 
 
-const EditModal = ({ editId, getAllStudent , modalToggle, studentName,setStudentName,studentEmail,setStudentEmail,setModalToggle }) => {
+const EditModal = ({editId}) => {
 
-    const updateHandler = async (e) => {
-        e.preventDefault()
-        let id = editId
-        let url = "http://localhost:4000/api/v1/update-student/"+id
-        const postData = {studentName, studentEmail }
-        await axios.post(url, postData, AxiosHeader)
-            .then((res) => {
-                if(res.status === 200) {
-                    setModalToggle(false)  
-                    toast.success('Update success', {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                    getAllStudent()
-                }
-            })
-            .catch((error) => {
-                console.log(error)
+
+    const { modalToggle, allStudent} = useSelector((state) => state.student)
+ 
+    // let users = allStudent.find((curEle) => curEle.id === editId)
+   
+    // console.log(users)
+    // console.log(users.studentName)
+    // console.log(editId)
+    // console.log(users.studentName)
+
+    const [fromData, setFormData] = useState({
+        // studentName: users.studentName,
+        // studentEmail: users.studentEmail
+    })
+    
+
+    const handelChange = (e) => {
+        const { name, value } = e.target
+        setFormData((prev) => {
+            return{
+                ...prev,
+                [name]: value
+            }
         })
     }
+ 
+
+    const studentUpdateSubmit = (e) => {
+        e.preventDefault()
+        console.log(fromData)
+    }
+
+ 
 
     const hideModalHandler = () => {
-        setModalToggle(false)
+        store.dispatch(setModalToggle(false))
     }
 
     return(
@@ -54,12 +65,12 @@ const EditModal = ({ editId, getAllStudent , modalToggle, studentName,setStudent
                         <span onClick={hideModalHandler} > <FaXmark /> </span>
                     </div>
                     <div className="modal_body">
-                        <form onSubmit={updateHandler}>
+                        <form onSubmit={studentUpdateSubmit}>
                             <div className="form-group">
                                 <input 
                                     type="text" 
-                                    value={studentName}
-                                    onChange={(e) => { setStudentName(e.target.value) }}
+                                    value={fromData.studentName}
+                                    onChange={(e) => {handelChange(e.target.value)}}
                                     placeholder="Student Name" 
                                     className="form-control" 
                                 />
@@ -67,8 +78,8 @@ const EditModal = ({ editId, getAllStudent , modalToggle, studentName,setStudent
                             <div className="form-group mt-3">
                                 <input 
                                     type="text" 
-                                    value={studentEmail}
-                                    onChange={(e) => { setStudentEmail(e.target.value) }}
+                                    value={fromData.studentEmail}
+                                    onChange={(e) => {handelChange(e.target.value) }}
                                     placeholder="Student Email" 
                                     className="form-control" 
                                 />

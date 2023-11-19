@@ -1,17 +1,26 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {toast } from 'react-toastify';
-import MasterLayout from "../marster-layout/MasterLayout"; 
-import { addNewStudent } from "../services/studentService";
- 
+import MasterLayout from "../marster-layout/MasterLayout";
+import { getToken } from "../helpers/SessionHelper";
+import { useSelector } from "react-redux";
+import store from "../redux/store/store"; 
+import { addNewStudent, studentUpdate } from "../services/studentService";
 
-const CreateStudent = () => {
+const AxiosHeader = { headers: { "token": getToken() } }
+
+const EditStudent = () => {
+
+    const {id} = useParams()
+    const { allStudent } = useSelector((state) => state.student)
+
+    let student = allStudent.find((curEle) => curEle.id === id)
 
     const navigator = useNavigate()
     const [fromData, setFormData] = useState({
-        studentName: "",
-        studentEmail: ""
+        studentName: student.studentName,
+        studentEmail: student.studentEmail
     })
 
     const handelChange = (e) => {
@@ -26,28 +35,34 @@ const CreateStudent = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault() 
-        addNewStudent(fromData)
+
+        studentUpdate(fromData, id)
         .then((res) => {
-            navigator('/')
-            toast.success('Student Create success', {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            console.log(res)
+            if(res === true) {
+                toast.success('Update success', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                navigator('/')
+            }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch((error) => {
+            console.log(error)
         })
     }
+
 
     return (
         <>
          <MasterLayout>
+
             <div className="create_student_section" style={{ marginTop: "100px" }}>
                 <div className="container">
                     <div className="row">
@@ -57,7 +72,7 @@ const CreateStudent = () => {
                                     <div className="form-group">
                                         <input 
                                             type="text" 
-                                            value={setFormData.studentName}
+                                            value={fromData.studentName}
                                             name="studentName"
                                             onChange={handelChange}
                                             placeholder="Student Name" 
@@ -67,7 +82,7 @@ const CreateStudent = () => {
                                     <div className="form-group mt-3">
                                         <input 
                                             type="text" 
-                                            value={setFormData.studentEmail}
+                                            value={fromData.studentEmail}
                                             name="studentEmail"
                                             onChange={handelChange}
                                             placeholder="Student Email" 
@@ -75,7 +90,7 @@ const CreateStudent = () => {
                                         />
                                     </div>
                                     <div className="text-cetner mt-3">
-                                        <button className="btn btn-success" type="submit">Add Student</button>
+                                        <button className="btn btn-success" type="submit">Update Student</button>
                                     </div>
                                 </form>
                             </div>
@@ -83,10 +98,11 @@ const CreateStudent = () => {
                     </div>
                 </div>
             </div>
+            
          </MasterLayout>
         </>
     )
 }
 
-export default CreateStudent
+export default EditStudent
 
