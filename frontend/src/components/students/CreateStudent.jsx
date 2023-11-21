@@ -51,7 +51,7 @@ const CreateStudent = () => {
             <div className="create_student_section" style={{ marginTop: "100px" }}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md-8 m-auto">
                             <div className="card p-3">
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-group">

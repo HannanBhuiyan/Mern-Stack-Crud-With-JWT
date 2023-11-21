@@ -23,6 +23,10 @@ const profileSchema = new Schema({
     password: {
         type: String,
         require: true
+    },
+    photo:{
+        type: String,
+        default: "/src/assets/profile.png"
     }
 },{ timestamps: true })
 

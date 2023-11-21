@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify"; 
 const BASE_URL = 'http://localhost:4000/api/v1/registration/' 
 
 const Registration = () => {
@@ -108,12 +107,13 @@ const Registration = () => {
                                         <div className="form-group mb-3">
                                             <label className="mb-2" >Confirm Password</label>
                                             <input type="password" name="comfirm_password" onChange={onchangeHandler} className="form-control" placeholder="Confirm Password" />
-
                                             <p style={errorStyle}>{confirmPasswordError && confirmPasswordError}</p>
-
-                                        </div> 
+                                        </div>  
                                         <input type="submit" value="Register" className="form-control bg-info" />
                                     </form>
+                                    <div className="text-center mt-3">
+                                        <Link to="/login" >Login</Link>
+                                    </div>
                                </div>
                             </div>
                         </div>

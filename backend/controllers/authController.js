@@ -70,3 +70,11 @@ exports.loginController = async  (req, res) => {
     }
 }
 
+exports.profileImageUpdate = (req, res) => {
+    
+}
+
+
+exports.passwordUpdateController = (req, res) => {
+
+}

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 import { ToastContainer } from "react-toastify"; 
 import { setToken, setUserDetails } from "../../helpers/SessionHelper";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const BASE_URL = 'http://localhost:4000/api/v1/login' 
 
 const Login = () => {
@@ -62,6 +62,10 @@ const Login = () => {
                                         </div>   
 
                                         <input type="submit" value="Login" className="form-control bg-info" />
+
+                                        <div className="text-center mt-3">
+                                            <Link to="/registration" >Registration</Link>
+                                        </div>
                                     </form>
                                </div>
                             </div>

@@ -24,7 +24,7 @@ const Navbar = () => {
                         <NavLink className={({isActive}) =>  (isActive ? 'active_menu' : '' )} to="/profile">Profile</NavLink>
                     </li> 
                      
-                    <li className="text-center">
+                    <li className="text-center mt-3">
                         <button onClick={removeLocalstorage} className="btn btn-success" >Logout</button>
                     </li> 
                 </ul> 
