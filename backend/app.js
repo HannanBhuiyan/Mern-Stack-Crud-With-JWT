@@ -17,7 +17,7 @@ const cors = require('cors')
 // implement rate limit
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 100,
+    limit: 500,
 })
 
 

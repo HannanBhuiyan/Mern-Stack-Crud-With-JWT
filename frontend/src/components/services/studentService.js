@@ -4,6 +4,7 @@ import { getAllStudents } from "../redux/state-slice/studentSlice"
 import store from "../redux/store/store"
 import { toast } from "react-toastify"
 import swal from "sweetalert"
+import { getStudentDetails } from "../redux/state-slice/profileSlice"
 
 const BASE_URL = 'http://localhost:4000/api/v1'
 const AxiosHeader = { headers: {"token": getToken()}}
@@ -81,4 +82,33 @@ export const deleteStudent = async (id) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+
+
+export const studentsDetails = async () => {
+    let url = BASE_URL+'/students/'
+    await axios.get(url, AxiosHeader)
+    .then((res) => {
+        store.dispatch(getStudentDetails(res.data[0]))
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+}
+
+
+export const profileInfoUpdate = async (formObj) => { 
+    let url = BASE_URL+'/update-profile/'
+    return await axios.post(url, formObj, AxiosHeader)
+    .then((res) => {
+       if(res.status === 200){
+            studentsDetails()
+            return true
+       }
+    })
+    .catch((error) => {
+        return false
+        console.log(error)
+    })
 }

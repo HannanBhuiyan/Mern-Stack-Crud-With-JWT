@@ -20,6 +20,6 @@ export const studentSlice = createSlice({
     }
 })
 
-export const { getAllStudents, setModalToggle, nameChangeHandler, emailChangeHandler  } = studentSlice.actions
+export const { getAllStudents, setModalToggle } = studentSlice.actions
 export default studentSlice.reducer
 

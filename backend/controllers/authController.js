@@ -69,12 +69,3 @@ exports.loginController = async  (req, res) => {
         res.status(500).send(error.message)
     }
 }
-
-exports.profileImageUpdate = (req, res) => {
-    
-}
-
-
-exports.passwordUpdateController = (req, res) => {
-
-}
