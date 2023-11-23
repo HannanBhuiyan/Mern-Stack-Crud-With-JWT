@@ -14,8 +14,6 @@ exports.getAllUsers = async (req, res) => {
     }
 }
 
-
-
 exports.registrationController = async (req, res) => {
     const { firstName, lastName, email, mobile, password } = req.body
 

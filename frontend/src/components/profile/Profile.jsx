@@ -3,7 +3,7 @@ import MasterLayout from "../marster-layout/MasterLayout";
 import profile_img from '../../assets/profile.png'
 import { getToken, getUserDetails } from "../helpers/SessionHelper";
 import axios from "axios";
-import { profileInfoUpdate, studentsDetails } from "../services/studentService";
+import { passwordUpdateRequest, profileInfoUpdate, studentsDetails } from "../services/studentService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -19,7 +19,7 @@ const Profile = () => {
     const profileData = useSelector((state) => state.profile.value)
   
     let previewImg, useImageRef = useRef()
-    let firstNameRef, lastNameRef, mobileRef = useRef() 
+    let firstNameRef, lastNameRef, mobileRef, passwordRef, newPasswordRef = useRef() 
 
     const changleImageHandler = () => {
         let imgFile = useImageRef.files[0]
@@ -52,6 +52,31 @@ const Profile = () => {
         })
     }
  
+
+    const changePasswordhandler = (e) => {
+        e.preventDefault()
+        let password = passwordRef.value
+        let newPassword = newPasswordRef.value
+        passwordUpdateRequest(password, newPassword)
+        .then((result) => {
+            if(result === true){
+                localStorage.clear()
+                window.location.href="/login"
+                console.log("password update success")
+            }
+            else {
+                console.log(result.response.data.message)
+            }
+        }) 
+    }
+
+    const submitImageHandler = (e) => {
+        e.preventDefault()
+
+        console.log(previewImg.src)
+
+    }
+
     useEffect(() => {
         studentsDetails()
     },[])
@@ -63,14 +88,13 @@ const Profile = () => {
                     <div className="row">
                         <div className="col-md-4">
                             <div className="card p-3">
-                              <form>
+                              <form onSubmit={submitImageHandler}>
                                 <div className="profle_image">
                                         <img ref={(input) =>previewImg=input}  src={profileData.photo} width="100%" alt="" />
                                     </div>
                                     <div className="change_image mt-3 text-center">
                                         <input onChange={changleImageHandler} ref={(input) => useImageRef=input} type="file"  />
                                         {showBtn && <button type="submit" className="btn btn-warning text-white mt-3">Update Image</button>}
-                                        
                                     </div>
                               </form>
                             </div>
@@ -101,10 +125,12 @@ const Profile = () => {
                             </div>
                             <div className="card p-3">
                                 <h2 className="mb-3">Update Password</h2> 
-                                <input type="text" disabled readOnly={true} defaultValue={profileData.email}  placeholder="Email"  className="form-control mb-4" />
-                                <input type="text" placeholder="Old Password"  className="form-control mb-4" />
-                                <input type="text" placeholder="New Password"  className="form-control mb-4" />
-                                <button className="btn btn-warning text-white" type="submit">Password Update</button>
+                                <form onSubmit={changePasswordhandler} >
+                                    <input type="text" disabled readOnly={true} defaultValue={profileData.email}  placeholder="Email"  className="form-control mb-4" />
+                                    <input type="text" ref={(input)=>passwordRef=input} placeholder="Old Password"  className="form-control mb-4" />
+                                    <input type="text" ref={(input)=>newPasswordRef=input } placeholder="New Password"  className="form-control mb-4" />
+                                    <button className="btn btn-warning text-white" type="submit">Password Update</button>
+                                </form>
                             </div>
                         </div>
                     </div>

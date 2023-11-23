@@ -109,6 +109,18 @@ export const profileInfoUpdate = async (formObj) => {
     })
     .catch((error) => {
         return false
-        console.log(error)
+    })
+}
+
+export const passwordUpdateRequest = async (password, newPassword) => {
+    let url = BASE_URL+'/password-update/'
+    let postBody = {password, newPassword} 
+    return await axios.post(url, postBody, AxiosHeader)
+    .then((res) => {
+        console.log(res)
+        return true
+    })
+    .catch((error) => {
+        return error;
     })
 }
