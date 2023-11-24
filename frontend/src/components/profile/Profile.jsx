@@ -3,7 +3,7 @@ import MasterLayout from "../marster-layout/MasterLayout";
 import profile_img from '../../assets/profile.png'
 import { getToken, getUserDetails } from "../helpers/SessionHelper";
 import axios from "axios";
-import { passwordUpdateRequest, profileInfoUpdate, studentsDetails } from "../services/studentService";
+import { passwordUpdateRequest, profileImageUpdateRequest, profileInfoUpdate, studentsDetails } from "../services/studentService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,10 +17,12 @@ const Profile = () => {
     const navigator = useNavigate()
     const [showBtn, setShowbtn] = useState(false)
     const profileData = useSelector((state) => state.profile.value)
-  
-    let previewImg, useImageRef = useRef()
-    let firstNameRef, lastNameRef, mobileRef, passwordRef, newPasswordRef = useRef() 
 
+
+    let previewImg, useImageRef = useRef()
+    let firstNameRef, lastNameRef, mobileRef, passwordRef, newPasswordRef, oldImageRef = useRef() 
+
+   
     const changleImageHandler = () => {
         let imgFile = useImageRef.files[0]
         previewImg.src = window.URL.createObjectURL(imgFile)
@@ -70,11 +72,32 @@ const Profile = () => {
         }) 
     }
 
-    const submitImageHandler = (e) => {
+    const submitImageHandler = async (e) => {
         e.preventDefault()
-
-        console.log(previewImg.src)
-
+        let oldImage = oldImageRef.value
+        let file = useImageRef.files[0]
+        const formData = new FormData()
+        formData.append("oldImage", oldImage)
+        formData.append("file", file)
+        profileImageUpdateRequest(formData)
+        .then((res) => {
+            if(res === true) {
+                navigator('/')
+                toast.success('Profile Image Update success', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+            else {
+                console.log(res.response.data.message)
+            }
+        })
     }
 
     useEffect(() => {
@@ -89,8 +112,15 @@ const Profile = () => {
                         <div className="col-md-4">
                             <div className="card p-3">
                               <form onSubmit={submitImageHandler}>
+                                <input className="d-none" type="text" ref={(input) =>oldImageRef=input} defaultValue={profileData.photo} />
                                 <div className="profle_image">
+                                        {profileData.photo === '/src/assets/profile.png' 
+                                        
+                                        ? 
                                         <img ref={(input) =>previewImg=input}  src={profileData.photo} width="100%" alt="" />
+                                        :
+                                        <img ref={(input) =>previewImg=input}  src={`http://localhost:4000/upload/${profileData.photo}`} crossOrigin="anonymous" width="100%" alt="" />
+                                        } 
                                     </div>
                                     <div className="change_image mt-3 text-center">
                                         <input onChange={changleImageHandler} ref={(input) => useImageRef=input} type="file"  />

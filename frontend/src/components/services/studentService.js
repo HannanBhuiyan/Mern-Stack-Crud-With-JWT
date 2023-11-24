@@ -124,3 +124,16 @@ export const passwordUpdateRequest = async (password, newPassword) => {
         return error;
     })
 }
+
+
+export const profileImageUpdateRequest = async (formData) => {
+    let url = BASE_URL+'/update-profile-image/'
+    return await axios.post(url, formData, AxiosHeader)
+    .then((response) => {
+        studentsDetails()
+        return true
+    })
+    .catch((error) => {
+        return error
+    })
+}

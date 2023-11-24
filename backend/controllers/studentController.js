@@ -2,6 +2,7 @@ const Profile = require("../models/profileModel");
 const Student = require("../models/studentModel")
 const bcrypt = require("bcrypt")
 const saltRounds = 10;
+const fs = require('fs')
 
 
 exports.getStudentController = async (req, res, next) => {
@@ -75,8 +76,31 @@ exports.studentDetails = async (req, res) => {
     }
 }
 
-exports.profileImageUpdate = (req, res) => {
-    
+exports.profileImageUpdate = async (req, res) => {
+   
+    let email = req.headers['email']
+    let postBody = {
+        photo: req.file.filename
+    }
+
+    let existsImage = await Profile.find({email})
+    if(existsImage[0].photo !== '/src/assets/profile.png'){
+        if(existsImage[0].photo === req.body.oldImage){
+            if(fs.existsSync('public/upload/'+req.body.oldImage)){
+                console.log("true")
+                fs.unlinkSync('public/upload/'+req.body.oldImage)
+            }
+        }
+    }
+
+    let updateImage = await Profile.findOneAndUpdate({email}, postBody, {new: true})
+    if(updateImage){
+        res.status(200).json({ "message" : "Image update success"})
+    }
+    else {
+        res.status(500).json({ "message": "Image not update" })
+    }
+
 }
 
 exports.profileInfoUpdate = async (req, res) => {
@@ -89,7 +113,6 @@ exports.profileInfoUpdate = async (req, res) => {
         res.status(500).json({ "message": "User not found" })
     }
 }
-
 
 exports.passwordUpdateController = async (req, res) => {
     let email = req.headers['email']
