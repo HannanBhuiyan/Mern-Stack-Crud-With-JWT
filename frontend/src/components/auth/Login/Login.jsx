@@ -64,7 +64,8 @@ const Login = () => {
                                         <input type="submit" value="Login" className="form-control bg-info" />
 
                                         <div className="text-center mt-3">
-                                            <Link to="/registration" >Registration</Link>
+                                            <Link to="/registration" className="me-3" >Registration</Link>
+                                            <Link to="/send-otp" >Forget Password</Link>
                                         </div>
                                     </form>
                                </div>

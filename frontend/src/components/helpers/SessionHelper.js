@@ -8,6 +8,14 @@ class SessionHelper {
         return localStorage.getItem('token')
     }
 
+    setLocalEmail(email){
+        localStorage.setItem("email", email)
+    }
+    
+    getLocalEmail(){
+        return localStorage.getItem('email')
+    }
+
     setUserDetails(userDetails) {
         localStorage.setItem('userDetails', JSON.stringify(userDetails))
     }
@@ -18,4 +26,11 @@ class SessionHelper {
 
 }
 
-export const { setToken, getToken, setUserDetails, getUserDetails } = new SessionHelper()
+export const { 
+    setLocalEmail, 
+    getLocalEmail, 
+    setToken, 
+    getToken, 
+    setUserDetails, 
+    getUserDetails 
+} = new SessionHelper()

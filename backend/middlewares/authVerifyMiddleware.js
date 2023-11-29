@@ -2,9 +2,7 @@ const jwt = require('jsonwebtoken');
 
 
 const authVerify = (req, res, next) => {
-
     const token = req.headers['token']
-
     jwt.verify(token, 'secretkey123456', (err, decoded) => {
         if(err) {
             res.status(500).json({ "status": "Unauthorized" })
@@ -15,7 +13,9 @@ const authVerify = (req, res, next) => {
             next()
         }
     })
-
 }
+
+
+
 
 module.exports = authVerify
