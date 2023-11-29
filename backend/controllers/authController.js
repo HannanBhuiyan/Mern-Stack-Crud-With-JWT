@@ -93,7 +93,7 @@ exports.verifyOtpController = async (req, res) => {
     let otp = req.body.otp
     let email = req.body.email
     try {
-        let existsEmail = await OTP.findOne({email})
+        let existsEmail = await OTP.findOne({email}).where({status: 0})
         if(existsEmail){
             if(existsEmail.otp === otp) {
                 let updateOtp = await OTP.findOneAndUpdate({email}, {status: 1}, {new: true}) 
@@ -116,10 +116,10 @@ exports.verifyOtpController = async (req, res) => {
         res.status(500).json({ "message" : error })
     }
 
-
 }
 
 exports.createNewPassword = async (req, res) => {
+    
     let email = req.body.email
     let password = req.body.password
     let hashPassword =  await bcrypt.hash(password, saltRounds) 
